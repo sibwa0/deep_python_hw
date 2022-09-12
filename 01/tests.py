@@ -1,11 +1,8 @@
 import unittest
 import unittest.mock
 
-import sys
-from io import StringIO
-import io
+from tictac_game import check_winner, got_victory, show_board, validate_input
 
-from tictac_game import check_winner, got_victory, input_data, show_board, validate_input
 
 class TestTicTac(unittest.TestCase):
 
@@ -21,10 +18,9 @@ class TestTicTac(unittest.TestCase):
 
     def test_validate_input_repeated_pos(self):
         self.assertFalse(validate_input([0, 1, 2, 3, 4, 4, 6, 7, 8]))
-    
+
     def test_validate_input_out_of_range(self):
         self.assertFalse(validate_input([1, 2, 3, 4, 5, 6, 7, 8, 9]))
-
 
     # show_board
     def test_show_board_correct_input(self):
@@ -95,3 +91,7 @@ class TestTicTac(unittest.TestCase):
         print("test_check_winner_o_wins")
         show_board(playground)
         self.assertTrue(check_winner(playground))
+
+
+if __name__ == '__main__':
+    unittest.main()
