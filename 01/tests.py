@@ -75,22 +75,22 @@ class TestTicTac(unittest.TestCase):
 
     # check_winner
     def test_check_winner_draw(self):
-        playground = [0, 1, 2, 5, 3, 6, 4, 8, 7]
+        playground = [0, 2, 3, 4, 7] + [1, 5, 6, 8]
         print("test_check_winner_draw")
         show_board(playground)
-        self.assertFalse(check_winner(playground))
+        self.assertFalse(check_winner([0, 2, 3, 4, 7], [1, 5, 6, 8]))
 
     def test_check_winner_x_wins(self):
-        playground = [1, 0, 4, 2, 5, 3, 6, 8, 7]
+        playground = [2, 3, 8, 4, 6] + [0, 1, 5, 7]
         print("test_check_winner_x_wins")
         show_board(playground)
-        self.assertTrue(check_winner(playground))
+        self.assertTrue(check_winner([2, 3, 8, 4, 6], [0, 1, 5, 7]))
 
     def test_check_winner_o_wins(self):
-        playground = [1, 0, 6, 4, 2, 7, 5, 8]
+        playground = [1, 6, 2, 5] + [0, 4, 7, 8]
         print("test_check_winner_o_wins")
         show_board(playground)
-        self.assertTrue(check_winner(playground))
+        self.assertTrue(check_winner([1, 6, 2, 5], [0, 4, 7, 8]))
 
 
 if __name__ == '__main__':

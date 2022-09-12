@@ -74,10 +74,7 @@ def got_victory(tmp_set):
     return False
 
 
-def check_winner(playground):
-    x_pos = [playground[i] for i in range(0, len(playground), 2) if i % 2 == 0]
-    o_pos = [playground[i] for i in range(1, len(playground), 2) if i % 2 != 0]
-
+def check_winner(x_pos, o_pos):
     if (got_victory(set(x_pos))):
         print("x wins")
         return True
@@ -88,16 +85,3 @@ def check_winner(playground):
 
     print("draw")
     return False
-
-
-# DEBUG
-# playground = input_data()
-# print()
-
-# validate_input(playground)
-# print()
-
-# show_board(playground)
-# print()
-
-# check_winner(playground)
