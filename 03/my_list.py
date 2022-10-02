@@ -18,13 +18,11 @@ class MyList(list):
             sum_other += other[j]
 
         if (sum_self == sum_other):
-            # print(f"...Sums equal: {sum_self} = {sum_other}")
             return True
 
-        # print(f"...Sums arent equal: {sum_self} != {sum_other}")
         return False
 
-
+    @classmethod
     def __add_zeros(self, lst, num_elems):
         list_cur_size = len(lst)
 
@@ -48,7 +46,6 @@ class MyList(list):
         elif lst2_size > lst1_size:
             return lst2
         
-        # print(f"...Sizes equal {lst1_size=} {lst2_size=}")
         return None
 
     @classmethod
@@ -66,9 +63,9 @@ class MyList(list):
         return left, right
 
     @classmethod
-    def __handle_2list(self, left, right):
+    def __handle_2list(cls, left, right):
 
-        upper_list = self.__class__.__get_max_list_by_size(left, right)
+        upper_list = cls.__get_max_list_by_size(left, right)
 
         if upper_list is not None:
             left_size = len(left)
@@ -76,11 +73,11 @@ class MyList(list):
             max_size = max(left_size, right_size)
 
             if left_size < right_size:
-                lst_with_zeros = self.__add_zeros(left, max_size)
+                lst_with_zeros = cls.__add_zeros(left, max_size)
 
                 return lst_with_zeros, upper_list
             else:
-                lst_with_zeros = self.__add_zeros(right, max_size)
+                lst_with_zeros = cls.__add_zeros(right, max_size)
 
                 return upper_list, lst_with_zeros
     
@@ -88,7 +85,7 @@ class MyList(list):
 
 
     def __add__(self, other):
-        left, right = self.from_my_list_to_list(self, other)
+        left, right = self.__class__.from_my_list_to_list(self, other)
 
         left, right = self.__class__.__handle_2list(left, right)
 
@@ -103,12 +100,12 @@ class MyList(list):
     def __radd__(self, other):
         left, right = self.from_my_list_to_list(self, other)
 
-        left_list, right_list = self.__class__.__handle_2list(left, right)
+        left, right = self.__class__.__handle_2list(left, right)
 
-        add_lst = self.__class__([0] * len(left_list))
+        add_lst = self.__class__([0] * len(left))
 
-        for i in range(len(left_list)):
-            add_lst[i] += left_list[i] + right_list[i]
+        for i in range(len(left)):
+            add_lst[i] += left[i] + right[i]
         
         return add_lst
 
@@ -127,7 +124,7 @@ class MyList(list):
 
 
     def __rsub__(self, other):
-        left, right = self.from_my_list_to_list(self, other)
+        right, left = self.from_my_list_to_list(self, other)
 
         left, right = self.__class__.__handle_2list(left, right)
 
@@ -173,13 +170,5 @@ b = MyList([0, 2, -3, 4])
 
 b_list = [0, 3, -2]
 
-# print("a = ", a)
-# print("b = ", b_list)
-
-# print((b_list + a).__class__.__name__)
-# print("a?b=", a + b_list)
-
-# print((b_list + a).__class__.__name__)
-# print("b?a=", b_list + a)
-print(dir(a))
+print("a?b=", [0, -1, 2] - MyList([0, 1, 3, 5]))
 
