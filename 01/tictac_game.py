@@ -85,3 +85,10 @@ def check_winner(x_pos, o_pos):
 
     print("draw")
     return False
+
+
+playground = input_data()
+if show_board(playground):
+    x_pos = [playground[i] for i in range(len(playground)) if i % 2 == 0]
+    o_pos = [playground[i] for i in range(len(playground)) if i % 2 == 1]
+    check_winner(x_pos, o_pos)
