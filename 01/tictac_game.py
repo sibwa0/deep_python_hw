@@ -33,7 +33,7 @@ def validate_input(playground):
 
 
 def show_board(playground):
-    if (validate_input(playground)):
+    if validate_input(playground):
         print("Result board state:")
         x_pos = [
             playground[i] for i in range(0, len(playground), 2) if i % 2 == 0
@@ -75,13 +75,25 @@ def got_victory(tmp_set):
 
 
 def check_winner(x_pos, o_pos):
-    if (got_victory(set(x_pos))):
+    if got_victory(set(x_pos)):
         print("x wins")
         return True
 
-    if (got_victory(set(o_pos))):
+    if got_victory(set(o_pos)):
         print("o wins")
         return True
 
     print("draw")
     return False
+
+
+if __name__ == "__main__":
+    game_board = input_data()
+    if show_board(game_board):
+        x_position = [
+            game_board[i] for i in range(len(game_board)) if i % 2 == 0
+        ]
+        o_position = [
+            game_board[i] for i in range(len(game_board)) if i % 2 == 1
+        ]
+        check_winner(x_position, o_position)
