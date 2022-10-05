@@ -87,8 +87,13 @@ def check_winner(x_pos, o_pos):
     return False
 
 
-playground = input_data()
-if show_board(playground):
-    x_pos = [playground[i] for i in range(len(playground)) if i % 2 == 0]
-    o_pos = [playground[i] for i in range(len(playground)) if i % 2 == 1]
-    check_winner(x_pos, o_pos)
+if __name__ == "__main__":
+    game_board = input_data()
+    if show_board(game_board):
+        x_position = [
+            game_board[i] for i in range(len(game_board)) if i % 2 == 0
+        ]
+        o_position = [
+            game_board[i] for i in range(len(game_board)) if i % 2 == 1
+        ]
+        check_winner(x_position, o_position)

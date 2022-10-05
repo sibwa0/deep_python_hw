@@ -109,7 +109,3 @@ class TestTicTac(unittest.TestCase):
             print("test_check_winner_o_wins")
             show_board(playground)
             self.assertTrue(check_winner([1, 6, 2, 5], [0, 4, 7, 8]))
-
-
-if __name__ == '__main__':
-    unittest.main()
