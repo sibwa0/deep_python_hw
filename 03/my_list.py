@@ -1,11 +1,12 @@
 class MyList(list):
-    def __init__(self, input_lst=list()):
+    def __init__(self, input_lst=None):
+        if input_lst is None:
+            self.__lst = []
         self.__lst = input_lst
 
     @property
     def lst(self):
         return self.__lst
-
 
     def __eq__(self, other):
         sum_self = 0
@@ -17,13 +18,13 @@ class MyList(list):
         for j in range(len(other)):
             sum_other += other[j]
 
-        if (sum_self == sum_other):
+        if sum_self == sum_other:
             return True
 
         return False
 
-    @classmethod
-    def __add_zeros(self, lst, num_elems):
+    @staticmethod
+    def __add_zeros(lst, num_elems):
         list_cur_size = len(lst)
 
         if list_cur_size < num_elems:
@@ -36,16 +37,16 @@ class MyList(list):
 
         return lst
 
-    @classmethod
-    def __get_max_list_by_size(self, lst1, lst2):
+    @staticmethod
+    def __get_max_list_by_size(lst1, lst2):
         lst1_size = len(lst1)
         lst2_size = len(lst2)
 
         if lst1_size > lst2_size:
             return lst1
-        elif lst2_size > lst1_size:
+        if lst2_size > lst1_size:
             return lst2
-        
+
         return None
 
     @classmethod
@@ -54,12 +55,12 @@ class MyList(list):
             left = lst1.lst
         else:
             left = lst1
-        
+
         if lst2.__class__ is cls:
             right = lst2.lst
         else:
             right = lst2
-        
+
         return left, right
 
     @classmethod
@@ -76,13 +77,12 @@ class MyList(list):
                 lst_with_zeros = cls.__add_zeros(left, max_size)
 
                 return lst_with_zeros, upper_list
-            else:
-                lst_with_zeros = cls.__add_zeros(right, max_size)
 
-                return upper_list, lst_with_zeros
-    
+            lst_with_zeros = cls.__add_zeros(right, max_size)
+
+            return upper_list, lst_with_zeros
+
         return left, right
-
 
     def __add__(self, other):
         left, right = self.__class__.from_my_list_to_list(self, other)
@@ -93,9 +93,8 @@ class MyList(list):
 
         for i in range(len(left)):
             add_lst[i] += left[i] + right[i]
-        
-        return add_lst
 
+        return add_lst
 
     def __radd__(self, other):
         left, right = self.from_my_list_to_list(self, other)
@@ -106,9 +105,8 @@ class MyList(list):
 
         for i in range(len(left)):
             add_lst[i] += left[i] + right[i]
-        
-        return add_lst
 
+        return add_lst
 
     def __sub__(self, other):
         left, right = self.from_my_list_to_list(self, other)
@@ -119,9 +117,8 @@ class MyList(list):
 
         for i in range(len(left)):
             add_lst[i] += left[i] - right[i]
-        
-        return add_lst
 
+        return add_lst
 
     def __rsub__(self, other):
         left, right = self.from_my_list_to_list(other, self)
@@ -132,9 +129,8 @@ class MyList(list):
 
         for i in range(len(left)):
             add_lst[i] += left[i] - right[i]
-        
-        return add_lst
 
+        return add_lst
 
     def __len__(self):
         return len(self.__lst)
@@ -145,14 +141,13 @@ class MyList(list):
     def __setitem__(self, key, value):
         self.__lst[key] = value
 
-
     def __str__(self):
         sum_elems = 0
         lst_size = len(self)
 
         res_str = "["
 
-        if (len(self) != 0):
+        if len(self) != 0:
             res_str += str(self.__lst[0])
             sum_elems += self.__lst[0]
 
@@ -163,13 +158,12 @@ class MyList(list):
         res_str += "] " + str(sum_elems)
 
         return res_str
-        
+
 
 if __name__ == '__main__':
-    a = MyList([1, 0])
+    a = MyList([0, -1, 2])
     b = MyList([0, 2, -3, 4])
 
-    b_list = [0, 3, -2]
+    a_list = [0, -1, 2]
 
-    print("a?b=", [0, -1, 2] - MyList([0, 1, 3, 5]))
-
+    print("a?b=", a_list - b)
