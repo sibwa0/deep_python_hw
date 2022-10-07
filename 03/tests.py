@@ -162,12 +162,16 @@ class TestMyList(unittest.TestCase):
 
     @unittest.mock.patch("my_list.MyList.from_my_list_to_list")
     @unittest.mock.patch("my_list.MyList._MyList__handle_2list")
-    def test__rsub__1MyList_right(self, mock_to_list, mock_handle):
+    def test__rsub__1MyList_right(self):
         a = [0, -1, 2]
         b = MyList([0, 1, 3, 5])
 
-        mock_to_list.return_value = ([0, 1, 3, 5], [0, -1, 2])
+        mock_to_list.return_value = ([0, -1, 2], [0, 1, 3, 5])
         mock_handle.return_value = ([0, -1, 2, 0], [0, 1, 3, 5])
 
+        print(a - b)
         self.assertEqual(a - b, MyList([0, -2, -1, -5]))
+
+if __name__ == '__main__':
+    TestMyList.test__rsub__1MyList_right()
     

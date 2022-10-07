@@ -124,7 +124,7 @@ class MyList(list):
 
 
     def __rsub__(self, other):
-        right, left = self.from_my_list_to_list(self, other)
+        left, right = self.from_my_list_to_list(other, self)
 
         left, right = self.__class__.__handle_2list(left, right)
 
@@ -137,7 +137,7 @@ class MyList(list):
 
 
     def __len__(self):
-        return len(self.__lst);
+        return len(self.__lst)
 
     def __getitem__(self, key):
         return self.__lst[key]
@@ -163,12 +163,13 @@ class MyList(list):
         res_str += "] " + str(sum_elems)
 
         return res_str
+        
 
+if __name__ == '__main__':
+    a = MyList([1, 0])
+    b = MyList([0, 2, -3, 4])
 
-a = MyList([1, 0])
-b = MyList([0, 2, -3, 4])
+    b_list = [0, 3, -2]
 
-b_list = [0, 3, -2]
-
-print("a?b=", [0, -1, 2] - MyList([0, 1, 3, 5]))
+    print("a?b=", [0, -1, 2] - MyList([0, 1, 3, 5]))
 
