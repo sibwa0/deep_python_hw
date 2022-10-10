@@ -1,19 +1,13 @@
-from types import new_class
-
-
+# task 1: MetaClass
 class CustomMeta(type):
     def __new__(mcs, name, bases, classdict: dict, **kwargs):
-        print("Meta __new__ mcs", mcs)
-
         new_classdict = {}
         for key, value in classdict.items():
             if key[0:2] != "__" and key[-1:-3] != "__":
                 key = f"custom_{key}"
             new_classdict[key] = value
-        
-        cls = super().__new__(mcs, name, bases, new_classdict)
-        print("Meta __new__ cls(dict)", cls.__dict__)
-        return cls
+
+        return super().__new__(mcs, name, bases, new_classdict)
 
 
 class CustomClass(metaclass=CustomMeta):
@@ -21,8 +15,10 @@ class CustomClass(metaclass=CustomMeta):
 
     def __getattribute__(self, name: str):
         if name[0:2] != "__" and name[-1:-3] != "__" and name[0:7] != "custom_":
-            return super().__getattr__(name)
+            print(super().__getattribute__(name))
+            return super().__getattribute__(name)
 
+        # print(super().__getattribute__(name))
         return super().__getattribute__(name)
 
     def __getattr__(self, name: str):
@@ -49,7 +45,7 @@ if __name__ == "__main__":
     print("-----")
     inst = CustomClass(30)
     inst.hello = "hello"
-    print(inst.x)
+    inst.x
     
     # print("\n", inst.__dict__)
     # print(f"\n{CustomClass.__dict__ = }")
@@ -71,3 +67,5 @@ if __name__ == "__main__":
     # inst.line() # ошибка
     # inst.yyy  # ошибка
     # CustomClass.x  # ошибка
+
+

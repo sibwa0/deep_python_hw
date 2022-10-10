@@ -1,3 +1,4 @@
+# task 2: Descriptor
 class Integer:
     def __set_name__(self, owner, name):
         self.name = name
@@ -77,7 +78,6 @@ class Data:
         self.name = name
         self.price = price
 
-
 if __name__ == "__main__":
     data1 = Data()
     data2 = Data()
@@ -88,4 +88,3 @@ if __name__ == "__main__":
     data2.price = "jack"
     print(data1.__dict__)
     print(data2.__dict__)
-    
