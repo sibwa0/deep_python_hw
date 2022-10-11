@@ -13,17 +13,15 @@ class CustomMeta(type):
 class CustomClass(metaclass=CustomMeta):
     x = 50
 
-    def __getattribute__(self, name: str):
-        if name[0:2] != "__" and name[-1:-3] != "__" and name[0:7] != "custom_":
-            print(super().__getattribute__(name))
-            return super().__getattribute__(name)
+    # def __getattribute__(self, name: str):
+    #     if name[0:2] != "__" and name[-1:-3] != "__" and name[0:7] != "custom_":
+    #         return super().__getattribute__(name)
 
-        # print(super().__getattribute__(name))
-        return super().__getattribute__(name)
+    #     return super().__getattribute__(name)
 
-    def __getattr__(self, name: str):
+    # def __getattr__(self, name: str):
 
-        return super().__getattribute__(name)
+    #     return super().__getattribute__(name)
 
     def __setattr__(self, name: str, value):
         if name[0:2] != "__" and name[-1:-3] != "__" and name[0:7] != "custom_":
@@ -45,7 +43,7 @@ if __name__ == "__main__":
     print("-----")
     inst = CustomClass(30)
     inst.hello = "hello"
-    inst.x
+    print(str(inst))
     
     # print("\n", inst.__dict__)
     # print(f"\n{CustomClass.__dict__ = }")

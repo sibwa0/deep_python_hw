@@ -26,7 +26,7 @@ class TestMeta(unittest.TestCase):
     def test_custom_getattribute_name_in_class_wrong(self):
         with patch('sys.stdout', new=StringIO()):
             inst = CustomClass()
-            self.assertEqual(inst.x, AttributeError)
+            self.assertEqual(inst.__getattr__("x"), AttributeError)
 
     def test_custom_getattribute_name_in_class_correct(self):
         with patch('sys.stdout', new=StringIO()):
