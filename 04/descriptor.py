@@ -57,7 +57,7 @@ class PositiveInteger:
 
     def __set__(self, obj, val):
         print(f"set {val} for {obj}")
-        if not isinstance(val, int) or val < 0:
+        if not isinstance(val, (int, float)) or val < 0:
             return setattr(obj, self._val, None)
 
         return setattr(obj, self._val, val)
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
     data1.num = 10
     data1.name = "Alexey"
-    data1.price = 15
+    data1.price = 15.5
     data2.price = "jack"
     print(data1.__dict__)
     print(data2.__dict__)
