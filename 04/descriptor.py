@@ -77,15 +77,3 @@ class Data:
         self.num = num
         self.name = name
         self.price = price
-
-
-if __name__ == "__main__":
-    data1 = Data()
-    data2 = Data()
-
-    data1.num = 10
-    data1.name = "Alexey"
-    data1.price = 15.5
-    data2.price = "jack"
-    print(data1.__dict__)
-    print(data2.__dict__)

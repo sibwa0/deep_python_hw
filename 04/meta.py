@@ -13,18 +13,9 @@ class CustomMeta(type):
 class CustomClass(metaclass=CustomMeta):
     x = 50
 
-    # def __getattribute__(self, name: str):
-    #     if name[0:2] != "__" and name[-1:-3] != "__" and name[0:7] != "custom_":
-    #         return super().__getattribute__(name)
-
-    #     return super().__getattribute__(name)
-
-    # def __getattr__(self, name: str):
-
-    #     return super().__getattribute__(name)
-
     def __setattr__(self, name: str, value):
-        if name[0:2] != "__" and name[-1:-3] != "__" and name[0:7] != "custom_":
+        if name[0:2] != "__" and name[-1:-3] != "__" \
+                and name[0:7] != "custom_":
             name = f"custom_{name}"
 
         return super().__setattr__(name, value)
@@ -39,11 +30,7 @@ class CustomClass(metaclass=CustomMeta):
         return "Custom_by_metaclass"
 
 
-if __name__ == "__main__":
-    print("-----")
-    inst = CustomClass(30)
-    print(str(inst))
-
+# if __name__ == "__main__":
     # print("\n", inst.__dict__)
     # print(f"\n{CustomClass.__dict__ = }")
     # inst.custom_x == 50
