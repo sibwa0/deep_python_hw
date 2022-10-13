@@ -26,12 +26,24 @@ class TestMeta(unittest.TestCase):
     def test_custom_getattribute_name_in_class_wrong(self):
         with patch('sys.stdout', new=StringIO()):
             inst = CustomClass()
-            self.assertEqual(inst.__getattr__("x"), AttributeError)
+            with self.assertRaises(AttributeError):
+                inst.x
 
     def test_custom_getattribute_name_in_class_correct(self):
         with patch('sys.stdout', new=StringIO()):
             inst = CustomClass()
             self.assertEqual(inst.__getattribute__("custom_x"), CustomClass.custom_x)
+
+    def test_custom_getattribute_add_new_attr(self):
+        with patch('sys.stdout', new=StringIO()):
+            inst = CustomClass()
+            inst.dynamic = "added later"
+
+            with self.assertRaises(AttributeError):
+                inst.dynamic
+
+            self.assertEqual(inst.__getattribute__("custom_dynamic"), "added later")
+            
 
     # line()
     def test_custom_line_correct(self):
@@ -42,7 +54,8 @@ class TestMeta(unittest.TestCase):
     def test_custom_line_wrong(self):
         with patch('sys.stdout', new=StringIO()):
             inst = CustomClass()
-            self.assertEqual(inst.line(), AttributeError)
+            with self.assertRaises(AttributeError):
+                inst.line()
 
     # str()
     def test_custom_str_correct(self):
