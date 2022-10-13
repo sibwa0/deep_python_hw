@@ -1,7 +1,7 @@
 # task 2: Descriptor
 class Integer:
     def __set_name__(self, owner, name):
-        self.name = name
+        # self.name = name
         self._val = f"_{name}"
 
     def __get__(self, obj, objtype):
@@ -24,7 +24,7 @@ class Integer:
 
 class String:
     def __set_name__(self, owner, name):
-        self.name = name
+        # self.name = name
         self._val = f"_{name}"
 
     def __get__(self, obj, objtype):
@@ -47,7 +47,7 @@ class String:
 
 class PositiveInteger:
     def __set_name__(self, owner, name):
-        self.name = name
+        # self.name = name
         self._val = f"_{name}"
 
     def __get__(self, obj, objtype):
@@ -77,6 +77,7 @@ class Data:
         self.num = num
         self.name = name
         self.price = price
+
 
 if __name__ == "__main__":
     data1 = Data()
