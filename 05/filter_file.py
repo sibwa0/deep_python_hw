@@ -14,6 +14,6 @@ def filter_file(file, targets: list):
 
 
 if __name__ == "__main__":
-    targets = ["роза", "яяя"]
+    targets = ["роз", "яяя"]
 
     print(filter_file("file_for_filter.txt", targets))
