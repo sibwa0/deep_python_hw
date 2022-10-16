@@ -1,8 +1,8 @@
 def filter_file(file, targets: list):
     result = []
 
-    with open(file, "r") as f:
-        file_as_txt = [s for s in f.readlines()]
+    with open(file, "r", encoding='utf-8') as file_desc:
+        file_as_txt = list(file_desc.readlines())
 
         for sentence in file_as_txt:
             for target in targets:
@@ -11,9 +11,3 @@ def filter_file(file, targets: list):
                     break
 
     return result
-
-
-if __name__ == "__main__":
-    targets = ["роз", "яяя"]
-
-    print(filter_file("file_for_filter.txt", targets))

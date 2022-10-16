@@ -1,7 +1,4 @@
-from collections import defaultdict
 import unittest
-from unittest.mock import patch
-from io import StringIO
 
 from filter_file import filter_file
 from lru_cache_dict import LRUCache
