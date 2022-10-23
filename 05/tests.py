@@ -1,30 +1,10 @@
 import unittest
 
-from filter_file import filter_file, filter_file_gen
+from filter_file import filter_file
 from lru_cache_dict import LRUCache
 
 
 class TestFilterFile(unittest.TestCase):
-    # func impl
-    # targets are in file
-    # def test_targets_in_file(self):
-    #     targets = ["роза", "яяя"]
-    #     self.assertEqual(
-    #         filter_file("file_for_filter.txt", targets),
-    #         [
-    #             '    а Роза упала на лапу Азора  \n',
-    #             'РОЗА\n'
-    #         ]
-    #     )
-
-    # # targets arent in file
-    # def test_targers_not_in_file(self):
-    #     targets = ["роз", "яяя"]
-    #     self.assertEqual(
-    #         filter_file("file_for_filter.txt", targets),
-    #         []
-    #     )
-
     # generator impl
     # targets are in file
     def test_targets_in_file_gen(self):
@@ -32,24 +12,25 @@ class TestFilterFile(unittest.TestCase):
             targets = ["роза", "яяя"]
             result = []
 
-            for sentence in filter_file_gen(file_desc, targets):
+            for sentence in filter_file(file_desc, targets):
                 result.append(sentence)
 
             self.assertEqual(
                 result,
                 [
-                    '    а Роза упала на лапу Азора  \n',
-                    'РОЗА\n'
+                    "    а Роза упала на лапу Азора  \n",
+                    "Привет мир ааарозааа яяя    \n",
+                    "РОЗА\n"
                 ]
             )
 
     # targets arent in file
     def test_targers_not_in_file_gen(self):
         with open("file_for_filter.txt", "r", encoding='utf-8') as file_desc:
-            targets = ["роз", "яяя"]
+            targets = ["роз", "яя"]
             result = []
 
-            for sentence in filter_file_gen(file_desc, targets):
+            for sentence in filter_file(file_desc, targets):
                 result.append(sentence)
 
             self.assertEqual(
