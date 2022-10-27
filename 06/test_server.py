@@ -1,77 +1,101 @@
 import socket
-import argparse
 import sys
 import threading
 import queue
 from collections import Counter
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-import logging
-
-from test_client import PORT, IP
+import time
+# import logging
+import json
+from utils import IP, PORT, console_server_input, setup_logger
 
 
 # constants
-logging.basicConfig(level=logging.INFO, filename="server_info.log", filemode="w")
-
-
-# console input 
-def console_server_input():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-w', default=0, type=int)
-    parser.add_argument('-k', default=0, type=int)
- 
-    return parser
+logger_server = setup_logger('second_logger', 'server_logfile.log')
 
 
 class Server:
     def __init__(self, num_workers, num_top_words):
-        logging.info("__INIT__")
+        logger_server.info("__INIT__")
         self._num_workers = num_workers
         self._num_top_words = num_top_words
         self._num_handled_urls = 0
 
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind((IP, PORT))
+        # num_workers fix
         self.server.listen(num_workers)
         
-        self._que = queue.Queue(num_workers)
-        self._lock = threading.Lock()
+        # QUUUUEEEEUUUEEE
+        self._que = queue.Queue(110)#num_workers)
+        # self._lock = threading.Lock()
         self._cnt = Counter()
 
-        self.threads = [
+        self._threads = [
             threading.Thread(
                 target=self.handle_url,
-                args=(self._que, self._cnt, self._lock),
+                args=(),
+                name=f"{i} Th"
             )
-            for _ in range(num_workers)
+            for i in range(num_workers)
         ]
 
     def connect(self):
         while True:
-            client, address = self.server.accept()
+            self._client, address = self.server.accept()
             print(f"Connection Established - {address[0]}:{address[1]}")
 
-            # get URLS in loop
-            url = client.recv(1024).decode("utf-8")
+            logger_server.info("__Start Threads")
+            for th in self._threads:
+                th.start()
+
+            while True:
+                try:
+                    logger_server.info(f"Input_ Queue size: {self._que.qsize()}")
+                    url = self._client.recv(1024).decode("utf-8")
+                except Exception:
+                    continue
+
+                # add url in queue 
+                self.divide_glued_urls(url)
+
+
+    def divide_glued_urls(self, glued_urls: str) -> str:
+        glued_urls = glued_urls.replace("\n", "")
+        http_start = glued_urls.find("http")
+        http_end = glued_urls[1:].find("http")
+
+        while http_start != -1:
+            if http_end == -1:
+                url = glued_urls[:]
+                self._que.put(url)
+                break
+        
+            url = glued_urls[:http_end + 1]
+            http_start = http_end + 1
+            glued_urls = glued_urls[http_start:]
+            http_end = glued_urls[1:].find("http")
+
             self._que.put(url)
 
-            print(url, self._que.qsize())
-            logging.info(self._que.qsize())
 
-            # miss logic
-
-            # client.send(bytes(string, "utf-8"))
-    
-    def handle_url(self, que, cnt, lock):
+    def handle_url(self):
+        wait = 0
         while True:
-            logging.info("__HANDLE_URL__")
+            logger_server.info(f"__Handle th ::{threading.current_thread().name}::")
             try:
-                url = que.get(timeout=1)
-                if url is None:
-                    break
+                wait += 1
+                url = self._que.get(timeout=1)
+
+                wait = 0
+                logger_server.info(f"__Correct url: {url}")
 
             except Exception:
+                logger_server.info(f"__Wait new url: {wait}")
+                if wait == 5:
+                    logger_server.info(f"__Stop th ::{threading.current_thread().name}::")
+                    break
                 continue
 
             # обработать url, записать в Counter
@@ -88,16 +112,29 @@ class Server:
     
             text = '\n'.join(chunk for chunk in chunks if chunk).split()
 
-            lock.acquire()
+            # update statistic
+            with threading.Lock():
+                self._cnt.update(text)
+                self._num_handled_urls += 1
+                logger_server.info(f"Handled Amount of URLS: {self._num_handled_urls}")
+                print(f"Handled Amount of URLS: {self._num_handled_urls}")
 
-            cnt.update(text)
-            self._num_handled_urls += 1
-            logging.info(f"Handled URLS Number: {self._num_handled_urls}")
+                self.handle_requests()
 
-            lock.release()
 
-    # def realese_queue(self):
+    def handle_requests(self):
+        # for th in self._threads:
+        #     th.start()
+        
+        # for th in self._threads:
+        #     th.join()
 
+        # logic: pack into json, send answer
+        top_k_words_cnt = self._cnt.most_common(self._num_top_words)
+        js = json.dumps(top_k_words_cnt, ensure_ascii=False)
+
+        logger_server.info(f"__send Answer: {js}")
+        self._client.send(bytes(js, "utf-8"))
 
 
 
@@ -107,8 +144,9 @@ if __name__ == "__main__":
 
     # print (f"w={namespace.k}, k={namespace.w}")
 
-    srv = Server(server_input.k, server_input.w)
+    srv = Server(server_input.w, server_input.k)
     srv.connect()
+    # srv.handle_requests()
 
 
     # server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
