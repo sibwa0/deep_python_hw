@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 IP = "127.0.0.1"
-PORT = 6663
+PORT = 6664
 URLS_TXT = "urls.txt"
 NUM_URLS = 100
 TOP100_URL = "https://infoselection.ru/infokatalog/internet-i-programmy/internet-osnovnoe/item/250-50-samykh-populyarnykh-internet-resursov-v-ssha"
@@ -41,7 +41,6 @@ def console_server_input():
     parser.add_argument('-k', default=0, type=int)
  
     return parser
-
 
 # create 100-urls file 
 def create_urls(urls_file):

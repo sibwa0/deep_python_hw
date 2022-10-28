@@ -1,122 +1,73 @@
+import socket
 import sys
-import argparse
-from urllib import request
-from faker import Faker
 import threading
-import queue
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-import requests
-from bs4.element import Comment
-import nltk
+from itertools import islice
+
+from utils import IP, PORT, console_client_input, create_urls, setup_logger
+
+# constants
+logger_client = setup_logger('first_logger', 'client_logfile.log')
 
 
-URLS_TXT = "urls.txt"
-NUM_URLS = 100
+class Client:
+    def __init__(self, urls_file, num_threads) -> None:
+        logger_client.info("__INIT__")
+        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-def parse_client_input():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-m', default=0)
-    parser.add_argument("-f", default=URLS_TXT)
- 
-    return parser
+        self._urls_file = urls_file
+        # self._size_urls = size_urls
+        self._num_threads = num_threads
+
+        self.threads = [
+            threading.Thread(
+                target=self.handle_request,
+                args=(i,),
+                name=f"{i} Th"
+            )
+            for i in range(self._num_threads)
+        ]
 
 
+    def handle_request(self, th_num):
+        logger_client.info("__HANDLE_REQUEST__")
 
-# client
-# class Client:
-#     def __init__(self, urls_file, num_threads) -> None:
-#         self._urls_file = urls_file
-#         self._num_threads = num_threads
+        with threading.Lock():
+            with open(self._urls_file, "r") as fd:
+                lines = islice(
+                    fd,
+                    th_num * self._num_threads,
+                    (th_num + 1) * self._num_threads
+                )
+                for url in lines:
+                    logger_client.info(f"__send: Thread({threading.current_thread().name}): {url}")
 
-#         threads = [
-#             threading.Thread(
-#                 target=handle_request,
-#                 args=(urls_file,),
-#                 name="counter_example"
-#             )
-#             for _ in range(num_threads)
-#         ]
+                    self.server.send(bytes(url, "utf-8"))
 
-#         self._sem = threading.Semaphore(10)
 
-#     @staticmethod
-#     def handle_request(self):
-#         pass
+    def connect(self):
+
+        logger_client.info("__Connect__")
+        self.server.connect((IP, PORT))
+
+        for th in self.threads:
+            logger_client.info(f"__start {th}")
+            th.start()
+
+        # for th in self.threads:
+        #     logger_client.info(f"__join {th}")
+        #     th.join()
+
+        for _ in range(100):
+            ans = self.server.recv(1024).decode("utf-8")
+            print(ans, end="\n\n")
 
 
 if __name__ == "__main__":
+    # console input
+    parser = console_client_input()
+    client_input = parser.parse_args(sys.argv[1:])
 
-    # parser = parse_client_input()
-    # namespace = parser.parse_args(sys.argv[1:])
+    # create_urls("urls_global.txt")
 
-    # print (f"m={namespace.m}, f={namespace.f}")
-
-    # with open(URLS_TXT, "w") as fd:
-    #     URL = "https://infoselection.ru/infokatalog/internet-i-programmy/internet-osnovnoe/item/250-50-samykh-populyarnykh-internet-resursov-v-ssha"
-
-    #     page = requests.get(URL)
-    #     soup = BeautifulSoup(page.text, "lxml")
-
-    #     table = soup.find("table", class_="tbscrol gentbl1 zebra4").find_all("a")
-    #     # print(type(table))
-    #     for i in range(NUM_URLS):
-    #         url = table[i].get("href")
-    #         fd.write(f"{url}\n")
-            # print(table[i].get("href"))
-
-#     from urllib.request import urlopen
-# from bs4 import BeautifulSoup
-
-    # url = "https://amazon.co.jp/"
-    # html = urlopen(url).read()
-    # soup = BeautifulSoup(html, features="html.parser")
-
-    # # kill all script and style elements
-    # for script in soup(["script", "style"]):
-    #     script.extract()    # rip it out
-
-    # # get text
-    # text = soup.get_text()
-
-    # # break into lines and remove leading and trailing space on each
-    # lines = (line.strip() for line in text.splitlines())
-    # # break multi-headlines into a line each
-    # chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-    # # drop blank lines
-    # text = '\n'.join(chunk for chunk in chunks if chunk)
-    # print(text)
-
-    
-    url = "https://uol.com.br/"    
-    html = urlopen(url).read()    
-    soup = BeautifulSoup(html, 'html.parser')
-
-    for script in soup(["script", "style"]):
-        script.extract()
-
-    text = soup.get_text()
-
-    lines = (line.strip() for line in text.splitlines())
-
-    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-    # drop blank lines
-    text = '\n'.join(chunk for chunk in chunks if chunk).split()
-    print(len(text))
-
-
-
-
-    # page = urlopen(URL)
-    # parsed_html = BeautifulSoup(page, features="lxml")
-    # print(parsed_html.body.find('div', attrs={'class' : 'container'}))#.text)
-
-
-    # response = urlopen(URL) #requests.get(URL)
-    # soup = BeautifulSoup(response, 'lxml')
-
-    # # print(soup.body.find_all(text=True))
-
-    # # allNews = soup.stripped_strings
-    # print(len([text for text in soup.stripped_strings]))
-    # # quotes = soup.find_all('span', class_='text')
+    clnt = Client(client_input.f, client_input.m)
+    answer = clnt.connect()
