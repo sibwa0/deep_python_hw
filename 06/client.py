@@ -3,7 +3,7 @@ import sys
 import threading
 from itertools import islice
 
-from utils import IP, PORT, console_client_input, create_urls, setup_logger
+from utils import IP, PORT, console_client_input, setup_logger
 
 # constants
 logger_client = setup_logger('first_logger', 'client_logfile.log')
@@ -27,31 +27,33 @@ class Client:
             for i in range(self._num_threads)
         ]
 
-
     def handle_request(self, th_num):
         logger_client.info("__HANDLE_REQUEST__")
 
         with threading.Lock():
-            with open(self._urls_file, "r") as fd:
+            with open(self._urls_file, "r", encoding='utf-8') as file_d:
                 lines = islice(
-                    fd,
+                    file_d,
                     th_num * self._num_threads,
                     (th_num + 1) * self._num_threads
                 )
                 for url in lines:
-                    logger_client.info(f"__send: Thread({threading.current_thread().name}): {url}")
+                    logger_client.info(
+                        "__send: %s: %s",
+                        threading.current_thread().name,
+                        url
+                    )
 
                     self.server.send(bytes(url, "utf-8"))
-
 
     def connect(self):
 
         logger_client.info("__Connect__")
         self.server.connect((IP, PORT))
 
-        for th in self.threads:
-            logger_client.info(f"__start {th}")
-            th.start()
+        for thread in self.threads:
+            logger_client.info("__start %s", thread)
+            thread.start()
 
         # for th in self.threads:
         #     logger_client.info(f"__join {th}")
@@ -70,4 +72,4 @@ if __name__ == "__main__":
     # create_urls("urls_global.txt")
 
     clnt = Client(client_input.f, client_input.m)
-    answer = clnt.connect()
+    clnt.connect()
