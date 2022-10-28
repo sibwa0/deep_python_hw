@@ -55,10 +55,6 @@ class Client:
             logger_client.info("__start %s", thread)
             thread.start()
 
-        # for th in self.threads:
-        #     logger_client.info(f"__join {th}")
-        #     th.join()
-
         for _ in range(100):
             ans = self.server.recv(1024).decode("utf-8")
             print(ans, end="\n\n")

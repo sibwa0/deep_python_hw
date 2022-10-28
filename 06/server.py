@@ -4,8 +4,8 @@ import threading
 import queue
 from collections import Counter
 from urllib.request import urlopen
-import json
 from bs4 import BeautifulSoup
+import json
 from utils import IP, PORT, console_server_input, setup_logger
 
 
@@ -101,20 +101,7 @@ class Server:
                 continue
 
             # обработать url, записать в Counter
-            html = urlopen(url).read()
-            soup = BeautifulSoup(html, 'html.parser')
-
-            for script in soup(["script", "style"]):
-                script.extract()
-
-            text = soup.get_text()
-
-            lines = (line.strip() for line in text.splitlines())
-            chunks = (
-                phrase.strip() for line in lines for phrase in line.split("  ")
-            )
-
-            text = '\n'.join(chunk for chunk in chunks if chunk).split()
+            text = self.get_text_from_url(url)
 
             # update statistic
             with threading.Lock():
@@ -127,6 +114,24 @@ class Server:
                 print(f"Handled Amount of URLS: {self._num_handled_urls}")
 
                 self.handle_requests()
+
+    def get_text_from_url(self, url):
+        html = urlopen(url).read()
+        soup = BeautifulSoup(html, 'html.parser')
+
+        for script in soup(["script", "style"]):
+            script.extract()
+
+        text = soup.get_text()
+
+        lines = (line.strip() for line in text.splitlines())
+        chunks = (
+            phrase.strip() for line in lines for phrase in line.split("  ")
+        )
+
+        text = '\n'.join(chunk for chunk in chunks if chunk).split()
+
+        return text
 
     def handle_requests(self):
         # logic: pack into json, send answer
