@@ -1,7 +1,6 @@
 import unittest
 import cffi
 
-
 from mul_matrix import py_mul_plenty_matr
 
 
@@ -44,7 +43,6 @@ class TestMulMatr(unittest.TestCase):
 
         Matrix* c_mul_plenty_matr(int row, int col, int iters);
         ''')
-        # matrix = ffi.new("Matrix *")
 
         row = 5
         col = 10
