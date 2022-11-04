@@ -7,7 +7,7 @@ pip install -r requirements.txt
 
 Usage:
 ~~~
-cd cffi
+cd cffi_c
 gcc -fPIC -shared -o lib_matrix.so matrix.c
 cd ..
 python main.py
