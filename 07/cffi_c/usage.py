@@ -20,12 +20,12 @@ def c_mul():
     int not_enough_space(const Matrix* matrix);
 
     Matrix* c_mul_plenty_matr(int row, int col, int iters);
-    Matrix* mul(const Matrix* l, const Matrix* r);
+    int mul(const Matrix* l, const Matrix* r, Matrix* result);
     ''')
     matrix = ffi.new("Matrix *")
 
     start_ts = time.time()
-    matrix = lib.c_mul_plenty_matr(90, 100, 1000)
+    matrix = lib.c_mul_plenty_matr(90, 100, 500)
     end_ts = time.time()
     print(f"py_mul_matrix: {end_ts-start_ts}")
     print(matrix)

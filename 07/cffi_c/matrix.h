@@ -14,7 +14,7 @@ void free_matrix(Matrix* matrix);
 int not_enough_space(const Matrix* matrix);
 
 Matrix* c_mul_plenty_matr(int row, int col, int iters);
-Matrix* mul(const Matrix* l, const Matrix* r);
+int mul(const Matrix* l, const Matrix* r, Matrix* result);
 
 
 #endif  // CFFI_MATRIX_H_

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <stdio.h>
 
 
 Matrix* create_matrix(int row, int col)
@@ -54,20 +55,21 @@ int not_enough_space(const Matrix* matrix) {
     return 0;
 }
 
-Matrix* mul(const Matrix* l, const Matrix* r) {
+int mul(const Matrix* l, const Matrix* r, Matrix* result) {
     if (not_enough_space(l) || not_enough_space(r)) {
-        return NULL;
+        return 1;
     }
     if (l->col != r->row) {
-        return NULL;
+        printf("wrong martixes size %d %d\n", l->col, r->row);
+        return 1;
     }
     size_t l_rows = l->row;
     size_t l_cols = l->col;
     size_t r_cols = r->col;
-    Matrix* result = create_matrix(l_rows, r_cols);
-    if (result == NULL) {
-        return NULL;
-    }
+
+    result->row = l_rows;
+    result->col = r_cols;
+
     double l_elem = 0;
     double r_elem = 0;
     for (size_t i = 0; i < l_rows; i++) {
@@ -79,7 +81,7 @@ Matrix* mul(const Matrix* l, const Matrix* r) {
             }
         }
     }
-    return result;
+    return 0;
 }
 
 Matrix* c_mul_plenty_matr(int row, int col, int iters)
@@ -100,16 +102,27 @@ Matrix* c_mul_plenty_matr(int row, int col, int iters)
 
         if (k % 2 == 0) {
             init_matrix_norm_value(even_iter);
-            res = mul(tmp, even_iter);
+            if (mul(tmp, even_iter, res))
+            {
+                printf("not mul even\n");
+                return NULL;
+            }
         }
         else
         {
             init_matrix_norm_value(odd_iter);
-            res = mul(tmp, even_iter);
+            if (mul(tmp, odd_iter, res))
+            {
+                printf("not mul odd\n");
+                return NULL;
+            }
         }
 
         if (res == NULL)
+        {
+            printf("not res space\n");
             return NULL;
+        }
     }
 
     free_matrix(even_iter);
