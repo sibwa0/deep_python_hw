@@ -5,9 +5,7 @@
 Клиент можно использовать любой, например, из aiohttp.
 Так, 10 одновременных запросов могут задаваться командой:
 
-`python fetcher.py -c 10 urls.txt`
-или
-`python fetcher.py 10 urls.txt`
+`python fetcher.py -r 10 -f urls.txt`
 
 ### 2. Тесты в отдельном модуле
 
