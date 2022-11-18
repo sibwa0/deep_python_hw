@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 
 
 URLS_TXT = "urls_copy.txt"
-NUM_URLS = 100
 
 
 # logging

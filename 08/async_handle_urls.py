@@ -5,13 +5,14 @@ import sys
 import time
 from collections import Counter
 from bs4 import BeautifulSoup
+import re
 
 from utils import (
     console_input,
     URLS_TXT
 )
 
-async def parse_encode_html(html):
+def parse_encode_html(html):
     soup = BeautifulSoup(html, 'html.parser')
 
     for script in soup(["script", "style"]):
@@ -36,7 +37,7 @@ async def fetch(session, q: Queue, cnt: Counter):
             async with session.get(url) as resp:
                 data = await resp.text()
 
-                text = await parse_encode_html(data)
+                text = parse_encode_html(data)
 
                 cnt.update(text)
                 print(cnt.most_common(5))
@@ -72,7 +73,7 @@ if __name__ == '__main__':
     st = time.time()
 
     cnt_dct = asyncio.run(batch_fetch(c_input.r, c_input.f))
-    # cnt_dct = asyncio.run(batch_fetch(3, URLS_TXT))
+    # cnt_dct = asyncio.run(batch_fetch(10, URLS_TXT))
 
     end = time.time()
     print(end - st)
