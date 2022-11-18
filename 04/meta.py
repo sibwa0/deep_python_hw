@@ -7,18 +7,15 @@ class CustomMeta(type):
                 key = f"custom_{key}"
             new_classdict[key] = value
 
+        new_classdict["__setattr__"] = cls.__setattr__
         return super().__new__(cls, name, bases, new_classdict)
+
+    def __setattr__(cls, name: str, value):
+        cls.__dict__[f"custom_{name}"] = value
 
 
 class CustomClass(metaclass=CustomMeta):
     x = 50
-
-    def __setattr__(self, name: str, value):
-        if name[0:2] != "__" and name[-1:-3] != "__" \
-                and name[0:7] != "custom_":
-            name = f"custom_{name}"
-
-        return super().__setattr__(name, value)
 
     def __init__(self, _val=99):
         self.val = _val
@@ -31,7 +28,8 @@ class CustomClass(metaclass=CustomMeta):
 
 
 # if __name__ == "__main__":
-    # print("\n", inst.__dict__)
+#     inst = CustomClass()
+#     print("\n", inst.__dict__)
     # print(f"\n{CustomClass.__dict__ = }")
     # inst.custom_x == 50
     # inst.custom_val == 99
