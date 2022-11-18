@@ -1,6 +1,7 @@
 import json
 from json import JSONDecodeError
 
+
 def word_process(key, dct):
     if key in dct:
         dct[key] += 1
@@ -61,7 +62,7 @@ def parse_json(json_str, callback=None, required_fields=None, keywords=None):
     cnt_male_female = {}
     for key in required_fields:
         for value in keywords:
-            # to form dct[key] in list of words 
+            # to form dct[key] in list of words
             for div_key in dct[key].split():
                 if value == div_key:
                     callback(value, cnt_male_female)
@@ -78,9 +79,9 @@ def input_random_names_number(amount, func):
     return res
 
 
-if __name__ == "__main__":
-    json_str = '{"key1": "Word1 word2", "key2" "word2 word3"}'
-    required_fields = ["key1"]
-    keywords = ["word2"]
+# if __name__ == "__main__":
+#     json_str = '{"key1": "Word1 word2", "key2" "word2 word3"}'
+#     required_fields = ["key1"]
+#     keywords = ["word2"]
 
-    print(parse_json(json_str, word_process, required_fields, keywords))
+#     print(parse_json(json_str, word_process, required_fields, keywords))

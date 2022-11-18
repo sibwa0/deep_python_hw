@@ -16,10 +16,14 @@ class TestJsonProcess(unittest.TestCase):
             required_fields = ["key1", "key2"]
             keywords = ['value1', 'value2']
             json_str = '{"female": "Cummings", "male": "Ramirez Sanchez"}'
-            callback = lambda x: x
 
             self.assertTrue(
-                is_valid_income_data(json_str, keywords, required_fields, callback)
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
             )
 
     # json_str
@@ -28,10 +32,14 @@ class TestJsonProcess(unittest.TestCase):
             required_fields = ["key1"]
             keywords = ['value1']
             json_str = '{"female": "Cummings", "male": 1}'
-            callback = lambda x: x
 
             self.assertFalse(
-                is_valid_income_data(json_str, keywords, required_fields, callback)
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
             )
 
     def test_is_valid_income_data_wrong_json_invalid(self):
@@ -39,10 +47,14 @@ class TestJsonProcess(unittest.TestCase):
             required_fields = ["key1"]
             keywords = ['value1']
             json_str = '{"female": "Cummings", "male" 1}'
-            callback = lambda x: x
 
             self.assertFalse(
-                is_valid_income_data(json_str, keywords, required_fields, callback)
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
             )
 
     # required_fields
@@ -51,10 +63,14 @@ class TestJsonProcess(unittest.TestCase):
             required_fields = 5
             keywords = ['value1']
             json_str = '{"female": "Cummings", "male": "Ramirez"}'
-            callback = lambda x: x
 
             self.assertFalse(
-                is_valid_income_data(json_str, keywords, required_fields, callback)
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
             )
 
     def test_is_valid_income_data_wrong_require_fields_elems_type(self):
@@ -62,10 +78,14 @@ class TestJsonProcess(unittest.TestCase):
             required_fields = ["key1", 5]
             keywords = ['value1']
             json_str = '{"female": "Cummings", "male": "Ramirez"}'
-            callback = lambda x: x
 
             self.assertFalse(
-                is_valid_income_data(json_str, keywords, required_fields, callback)
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
             )
 
     # keywords
@@ -74,10 +94,14 @@ class TestJsonProcess(unittest.TestCase):
             required_fields = 5
             keywords = ['value1']
             json_str = '{"female": "Cummings", "male": "Ramirez"}'
-            callback = lambda x: x
 
             self.assertFalse(
-                is_valid_income_data(json_str, keywords, required_fields, callback)
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
             )
 
     def test_is_valid_income_data_wrong_keywords_elems_type(self):
@@ -85,10 +109,14 @@ class TestJsonProcess(unittest.TestCase):
             required_fields = ["key1", "key2"]
             keywords = ['value1', 5]
             json_str = '{"female": "Cummings", "male": "Ramirez"}'
-            callback = lambda x: x
 
             self.assertFalse(
-                is_valid_income_data(json_str, keywords, required_fields, callback)
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
             )
 
     # callback
@@ -97,10 +125,14 @@ class TestJsonProcess(unittest.TestCase):
             required_fields = ["key1", "key2"]
             keywords = ['value1', 'value2']
             json_str = '{"female": "Cummings", "male": "Ramirez Sanchez"}'
-            callback = None
 
             self.assertFalse(
-                is_valid_income_data(json_str, keywords, required_fields, callback)
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    callback=None
+                )
             )
 
     # word_process
