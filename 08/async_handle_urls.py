@@ -79,3 +79,4 @@ if __name__ == '__main__':
     print(end - st)
     print()
     print(cnt_dct.most_common(10))
+    print(cnt_dct.most_common(1)[0][0] == "the")
