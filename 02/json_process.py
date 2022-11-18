@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 
 
 def word_process(key, dct):
@@ -8,9 +9,15 @@ def word_process(key, dct):
         dct[key] = 1
 
 
-def is_valid_income_data(json_str, required_fields, keywords):
-    if json.loads(json_str) == ValueError:
+def is_valid_income_data(json_str, required_fields, keywords, callback):
+    try:
+        json.loads(json_str)
+    except JSONDecodeError:
         print("...Not valid json document.")
+        return False
+
+    if callback is None:
+        print("...Not Callback, None")
         return False
 
     tmp_dct = json.loads(json_str)
@@ -42,8 +49,8 @@ def is_valid_income_data(json_str, required_fields, keywords):
     return True
 
 
-def parse_json(json_str, callback, required_fields=None, keywords=None):
-    if not is_valid_income_data(json_str, required_fields, keywords):
+def parse_json(json_str, callback=None, required_fields=None, keywords=None):
+    if not is_valid_income_data(json_str, required_fields, keywords, callback):
         return False
 
     dct = json.loads(json_str)
@@ -54,10 +61,11 @@ def parse_json(json_str, callback, required_fields=None, keywords=None):
 
     cnt_male_female = {}
     for key in required_fields:
-        # if (key in dct):
         for value in keywords:
-            if value in dct[key]:
-                callback(value, cnt_male_female)
+            # to form dct[key] in list of words
+            for div_key in dct[key].split():
+                if value == div_key:
+                    callback(value, cnt_male_female)
 
     return cnt_male_female
 
@@ -69,3 +77,11 @@ def input_random_names_number(amount, func):
         res += " " + func()
 
     return res
+
+
+# if __name__ == "__main__":
+#     json_str = '{"key1": "Word1 word2", "key2" "word2 word3"}'
+#     required_fields = ["key1"]
+#     keywords = ["word2"]
+
+#     print(parse_json(json_str, word_process, required_fields, keywords))

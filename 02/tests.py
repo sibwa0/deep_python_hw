@@ -1,5 +1,6 @@
 import unittest
-import unittest.mock
+from unittest.mock import patch
+from io import StringIO
 import json
 from faker import Faker
 from json_process import parse_json, is_valid_income_data, \
@@ -10,68 +11,129 @@ class TestJsonProcess(unittest.TestCase):
 
     # is_valid_income_data
     # valid
-    def test_is_valid_true_income_data_(self):
-        required_fields = ["key1", "key2"]
-        keywords = ['value1', 'value2']
-        json_str = {"female": "Cummings", "male": "Ramirez Sanchez"}
-        json_str = json.dumps(json_str)
+    def test_is_valid_true_income_data_true(self):
+        with patch("sys.stdout", new=StringIO()):
+            required_fields = ["key1", "key2"]
+            keywords = ['value1', 'value2']
+            json_str = '{"female": "Cummings", "male": "Ramirez Sanchez"}'
 
-        self.assertTrue(
-            is_valid_income_data(json_str, keywords, required_fields)
-        )
+            self.assertTrue(
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
+            )
 
     # json_str
-    def test_is_valid_income_data_wrong_json(self):
-        required_fields = ["key1"]
-        keywords = ['value1']
-        json_str = {"female": "Cummings", "male": 1}
-        json_str = json.dumps(json_str)
+    def test_is_valid_income_data_wrong_json_input(self):
+        with patch("sys.stdout", new=StringIO()):
+            required_fields = ["key1"]
+            keywords = ['value1']
+            json_str = '{"female": "Cummings", "male": 1}'
 
-        self.assertFalse(
-            is_valid_income_data(json_str, keywords, required_fields)
-        )
+            self.assertFalse(
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
+            )
+
+    def test_is_valid_income_data_wrong_json_invalid(self):
+        with patch("sys.stdout", new=StringIO()):
+            required_fields = ["key1"]
+            keywords = ['value1']
+            json_str = '{"female": "Cummings", "male" 1}'
+
+            self.assertFalse(
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
+            )
 
     # required_fields
     def test_is_valid_income_data_wrong_require_fields_list_type(self):
-        required_fields = 5
-        keywords = ['value1']
-        json_str = {"female": "Cummings", "male": "Ramirez"}
-        json_str = json.dumps(json_str)
+        with patch("sys.stdout", new=StringIO()):
+            required_fields = 5
+            keywords = ['value1']
+            json_str = '{"female": "Cummings", "male": "Ramirez"}'
 
-        self.assertFalse(
-            is_valid_income_data(json_str, keywords, required_fields)
-        )
+            self.assertFalse(
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
+            )
 
     def test_is_valid_income_data_wrong_require_fields_elems_type(self):
-        required_fields = ["key1", 5]
-        keywords = ['value1']
-        json_str = {"female": "Cummings", "male": "Ramirez"}
-        json_str = json.dumps(json_str)
+        with patch("sys.stdout", new=StringIO()):
+            required_fields = ["key1", 5]
+            keywords = ['value1']
+            json_str = '{"female": "Cummings", "male": "Ramirez"}'
 
-        self.assertFalse(
-            is_valid_income_data(json_str, keywords, required_fields)
-        )
+            self.assertFalse(
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
+            )
 
     # keywords
     def test_is_valid_income_data_wrong_keywords_list_type(self):
-        required_fields = 5
-        keywords = ['value1']
-        json_str = {"female": "Cummings", "male": "Ramirez"}
-        json_str = json.dumps(json_str)
+        with patch("sys.stdout", new=StringIO()):
+            required_fields = 5
+            keywords = ['value1']
+            json_str = '{"female": "Cummings", "male": "Ramirez"}'
 
-        self.assertFalse(
-            is_valid_income_data(json_str, keywords, required_fields)
-        )
+            self.assertFalse(
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
+            )
 
     def test_is_valid_income_data_wrong_keywords_elems_type(self):
-        required_fields = ["key1", "key2"]
-        keywords = ['value1', 5]
-        json_str = {"female": "Cummings", "male": "Ramirez"}
-        json_str = json.dumps(json_str)
+        with patch("sys.stdout", new=StringIO()):
+            required_fields = ["key1", "key2"]
+            keywords = ['value1', 5]
+            json_str = '{"female": "Cummings", "male": "Ramirez"}'
 
-        self.assertFalse(
-            is_valid_income_data(json_str, keywords, required_fields)
-        )
+            self.assertFalse(
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    lambda x: x
+                )
+            )
+
+    # callback
+    def test_is_valid_true_income_data_wrong_callback(self):
+        with patch("sys.stdout", new=StringIO()):
+            required_fields = ["key1", "key2"]
+            keywords = ['value1', 'value2']
+            json_str = '{"female": "Cummings", "male": "Ramirez Sanchez"}'
+
+            self.assertFalse(
+                is_valid_income_data(
+                    json_str,
+                    keywords,
+                    required_fields,
+                    callback=None
+                )
+            )
 
     # word_process
     # person is already in dict
@@ -98,15 +160,14 @@ class TestJsonProcess(unittest.TestCase):
     # valid
     @unittest.mock.patch("json_process.word_process")
     def test_parse_json(self, word_mock):
-        json_str = {"female": "Cummings", "male": "Sklyannyy Ramirez"}
+        json_str = '{"female": "Cummings", "male": "AleSklyannyyXey Ramirez"}'
         required_fields = ["female", "male"]
         keywords = ["Cummings", "Sklyannyy", "Ramirez"]
-        json_str = json.dumps(json_str)
 
         word_mock.return_value = None
         parse_json(json_str, word_mock, required_fields, keywords)
 
-        self.assertEqual(word_mock.call_count, 3)
+        self.assertEqual(word_mock.call_count, 2)
 
     @unittest.mock.patch("json_process.word_process")
     def test_parse_json_fake_generation(self, word_mock):
@@ -131,10 +192,9 @@ class TestJsonProcess(unittest.TestCase):
     # invalid
     @unittest.mock.patch("json_process.is_valid_income_data")
     def test_parse_json_invalid_data(self, is_valid_data_mock):
-        json_str = {"female": "Cummings", "male": "Sklyannyy Ramirez"}
+        json_str = '{"female": "Cummings", "male": "Sklyannyy Ramirez"}'
         required_fields = ["female", 5]
         keywords = ['Cummings', 'Sklyannyy', 'Ramirez']
-        json_str = json.dumps(json_str)
 
         is_valid_data_mock.return_value = False
         self.assertFalse(
@@ -144,12 +204,13 @@ class TestJsonProcess(unittest.TestCase):
         self.assertTrue(is_valid_data_mock.called)
 
     def test_parse_json_empty_json(self):
-        json_str = {}
-        required_fields = ["female", "male"]
-        keywords = ['Cummings', 'Sklyannyy', 'Ramirez']
-        json_str = json.dumps(json_str)
+        with patch("sys.stdout", new=StringIO()):
+            json_str = {}
+            required_fields = ["female", "male"]
+            keywords = ['Cummings', 'Sklyannyy', 'Ramirez']
+            json_str = json.dumps(json_str)
 
-        self.assertEqual(
-            parse_json(json_str, word_process, required_fields, keywords),
-            None
-        )
+            self.assertEqual(
+                parse_json(json_str, word_process, required_fields, keywords),
+                None
+            )

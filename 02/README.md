@@ -7,7 +7,7 @@
 Причём ключами и значениями являются только строки.
 
 ```py
-def parse_json(json_str: str, required_fields=None, keywords=None, keyword_callback)
+def parse_json(json_str: str, required_fields=None, keywords=None, keyword_callback=None)
 ```
 
 Например, представим, что json_str = '{"key1": "Word1 word2", "key2": "word2 word3"}', а required_fields = ["key1"], keywords = ["word2"]. Тогда keyword_callback будет вызвана только для слова 'word2' для ключа 'key1'.
