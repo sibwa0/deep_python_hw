@@ -1,16 +1,15 @@
 import asyncio
 from queue import Queue
-import aiohttp
 import sys
 import time
 from collections import Counter
 from bs4 import BeautifulSoup
-import re
+import aiohttp
 
 from utils import (
-    console_input,
-    URLS_TXT
+    console_input
 )
+
 
 def parse_encode_html(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -29,9 +28,10 @@ def parse_encode_html(html):
 
     return text
 
-async def fetch(session, q: Queue, cnt: Counter):
+
+async def fetch(session, que: Queue, cnt: Counter):
     while True:
-        url = await q.get()
+        url = await que.get()
 
         try:
             async with session.get(url) as resp:
@@ -42,26 +42,26 @@ async def fetch(session, q: Queue, cnt: Counter):
                 cnt.update(text)
                 print(cnt.most_common(5))
         finally:
-            q.task_done()
-        
+            que.task_done()
+
 
 async def batch_fetch(workers, urls):
-    q = asyncio.Queue()
+    que = asyncio.Queue()
     cnt = Counter()
 
     with open(urls, "r", encoding="utf-8") as fd_urls:
         for url in fd_urls:
-            await q.put(url)
+            await que.put(url)
 
     async with aiohttp.ClientSession() as session:
         workers = [
-            asyncio.create_task(fetch(session, q, cnt))
+            asyncio.create_task(fetch(session, que, cnt))
             for _ in range(workers)
         ]
-        await q.join()
-        
-        for w in workers:
-            w.cancel()
+        await que.join()
+
+        for worker in workers:
+            worker.cancel()
 
     return cnt
 
