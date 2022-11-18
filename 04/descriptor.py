@@ -1,5 +1,8 @@
 # task 2: Descriptor
 class Integer:
+    def __init__(self):
+        self._val = 0
+
     def __set_name__(self, owner, name):
         self._val = f"_{name}"
 
@@ -17,6 +20,9 @@ class Integer:
 
 
 class String:
+    def __init__(self):
+        self._val = ""
+
     def __set_name__(self, owner, name):
         self._val = f"_{name}"
 
@@ -34,6 +40,9 @@ class String:
 
 
 class PositiveInteger:
+    def __init__(self):
+        self._val = 0
+
     def __set_name__(self, owner, name):
         self._val = f"_{name}"
 

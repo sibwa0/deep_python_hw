@@ -1,6 +1,4 @@
 import unittest
-from unittest.mock import patch
-from io import StringIO
 
 from meta import CustomClass
 from descriptor import Data
