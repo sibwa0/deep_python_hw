@@ -57,6 +57,7 @@ class Server:
 
                 # add url in queue
                 self.divide_glued_urls(url)
+            
 
     def divide_glued_urls(self, glued_urls: str) -> str:
         glued_urls = glued_urls.replace("\n", "")
