@@ -40,13 +40,13 @@ class LRUCache:
 
             self.logger.info(
                 f"set :: New :: key( {key} ) ( {value} ) :: \
-                size( {self.size} ), limit( {self.limit} )"
+size( {self.size} ), limit( {self.limit} )"
             )
 
         elif self.size == self.limit:
             self.logger.debug(
                 f"set :: Dict is full :: \
-                size( {self.size} ) = limit( {self.limit} )"
+size( {self.size} ) = limit( {self.limit} )"
             )
 
             for i in self.def_dct:
@@ -58,13 +58,13 @@ class LRUCache:
                     if i == key:
                         self.logger.info(
                             f"set :: Same Key :: key( {i} ) \
-                            prev( {self.def_dct[i][0]} ) -> new( {value} )"
+prev( {self.def_dct[i][0]} ) -> new( {value} )"
                         )
                     else:
                         self.logger.info(
                             f"set :: New Instead :: \
-                            key( {i} ) ( {self.def_dct[i][0]} ) -> \
-                            key( {key} ) ( {value} )"
+key( {i} ) ( {self.def_dct[i][0]} ) -> \
+key( {key} ) ( {value} )"
                         )
                         del self.def_dct[i]
 
