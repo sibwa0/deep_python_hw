@@ -30,7 +30,7 @@ class TestMyList(unittest.TestCase):
         my_lst2 = MyList([0, 1, 2])
 
         self.assertTrue(my_lst1 != my_lst2)
-    
+
     # __lt__
     def test_lt_dif_sum(self):
         my_lst1 = MyList([0, 1, 2])
@@ -91,7 +91,7 @@ class TestMyList(unittest.TestCase):
         self.assertEqual(my_lst1 + my_lst2, MyList([0, 0, 5, 5]))
         self.assertEqual(my_lst1, MyList([0, -1, 2, 5]))
         self.assertEqual(my_lst2, MyList([0, 1, 3]))
-    
+
     def test__add__two_my_list_second(self):
         my_lst1 = MyList([0, -1, 2, 5])
         my_lst2 = MyList([0, 1, 3, 5, 6])
@@ -107,7 +107,7 @@ class TestMyList(unittest.TestCase):
         self.assertEqual(my_lst + lst, MyList([0, 0, 5, 5]))
         self.assertEqual(my_lst, MyList([0, -1, 2]))
         self.assertEqual(lst, [0, 1, 3, 5])
-    
+
     def test__add__one_my_list_left_first(self):
         my_lst = MyList([0, -1, 2, 5, 6])
         lst = [0, 1, 3, 5]
@@ -131,7 +131,6 @@ class TestMyList(unittest.TestCase):
         self.assertEqual(lst + my_lst, MyList([0, 0, 5, 10, 6]))
         self.assertEqual(lst, [0, -1, 2, 5, 6])
         self.assertEqual(my_lst, MyList([0, 1, 3, 5]))
-
 
     # __sub__, __rsub__
     def test__sub__two_my_list_second(self):
@@ -157,7 +156,7 @@ class TestMyList(unittest.TestCase):
         self.assertEqual(my_lst - lst, MyList([0, -2, -1, -5]))
         self.assertEqual(my_lst, MyList([0, -1, 2]))
         self.assertEqual(lst, [0, 1, 3, 5])
-    
+
     def test__sub__one_my_list_left_first(self):
         my_lst = MyList([0, -1, 2, 5, 6])
         lst = [0, 1, 3, 5]
@@ -173,7 +172,7 @@ class TestMyList(unittest.TestCase):
         self.assertEqual(lst - my_lst, MyList([0, -2, -1, -5]))
         self.assertEqual(lst, [0, -1, 2])
         self.assertEqual(my_lst, MyList([0, 1, 3, 5]))
-    
+
     def test__rsub__one_my_list_right_first(self):
         lst = [0, -1, 2, 5, 6]
         my_lst = MyList([0, 1, 3, 5])

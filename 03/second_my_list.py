@@ -1,89 +1,106 @@
 class MyList(list):
     def __init__(self, input_lst):
-        for i in range(len(input_lst)):
-            self.append(input_lst[i])
+        for i in input_lst:
+            self.append(i)
 
     def __lt__(self, other) -> bool:
         return sum(self) < sum(other)
+
     def __le__(self, other) -> bool:
         return sum(self) <= sum(other)
+
     def __eq__(self, other) -> bool:
         return sum(self) == sum(other)
+
     def __ne__(self, other) -> bool:
         return sum(self) != sum(other)
+
     def __gt__(self, other) -> bool:
         return sum(self) > sum(other)
+
     def __ge__(self, other) -> bool:
         return sum(self) >= sum(other)
 
     @staticmethod
-    def __get_iters_large(self: list, other: list):
-        self_size = len(self)
+    def __get_iters_large(self_list: list, other: list):
+        self_size = len(self_list)
         other_size = len(other)
 
-        iters, bigger = (other_size, self) if self_size >= other_size else (self_size, other)
+        iters, smaller, bigger = \
+            (self_size, other, self_list) if self_size >= other_size \
+            else (other_size, self_list, other)
 
-        return iters, bigger
+        return iters, smaller, bigger
 
     def __add__(self, other) -> list:
-        iters, bigger = self.__get_iters_large(self, other)
+        iters, smaller, bigger = self.__get_iters_large(self, other)
 
         res = MyList([])
 
+        tmp_smaller = smaller.copy()
+        for _ in range(len(smaller), iters):
+            tmp_smaller.append(0)
+
         for i in range(iters):
-            res.append(self[i] + other[i])
-        for j in range(iters, len(bigger)):
-            res.append(bigger[j])
-        
+            res.append(bigger[i] + tmp_smaller[i])
+
         return res
 
     def __radd__(self, other) -> list:
-        iters, bigger = self.__get_iters_large(self, other)
+        iters, smaller, bigger = self.__get_iters_large(self, other)
 
         res = MyList([])
 
+        tmp_smaller = smaller.copy()
+        for _ in range(len(smaller), iters):
+            tmp_smaller.append(0)
+
         for i in range(iters):
-            res.append(self[i] + other[i])
-        for j in range(iters, len(bigger)):
-            res.append(bigger[j])
-        
+            res.append(bigger[i] + tmp_smaller[i])
+
         return res
-    
+
     def __sub__(self, other) -> list:
-        iters, bigger = self.__get_iters_large(self, other)
+        iters, smaller, bigger = self.__get_iters_large(self, other)
 
         res = MyList([])
 
+        tmp_smaller = smaller.copy()
+        for _ in range(len(smaller), iters):
+            tmp_smaller.append(0)
+
+        if iters == len(self):
+            first, second = bigger, tmp_smaller
+        else:
+            first, second = tmp_smaller, bigger
+
         for i in range(iters):
-            res.append(self[i] - other[i])
+            res.append(first[i] - second[i])
 
-        reverse = 1
-        if bigger is other:
-            reverse = -1
-
-        for j in range(iters, len(bigger)):
-            res.append(reverse * bigger[j])
-        
         return res
-    
+
     def __rsub__(self, other) -> list:
-        iters, bigger = self.__get_iters_large(self, other)
+        iters, smaller, bigger = self.__get_iters_large(self, other)
 
         res = MyList([])
 
-        reverse = -1
-        if bigger is other:
-            reverse = 1
-        
+        tmp_smaller = smaller.copy()
+        for _ in range(len(smaller), iters):
+            tmp_smaller.append(0)
+
+        if iters == len(self):
+            first, second = tmp_smaller, bigger
+        else:
+            first, second = bigger, tmp_smaller
+
         for i in range(iters):
-            res.append(other[i] - self[i])
-        for j in range(iters, len(bigger)):
-            res.append(reverse * bigger[j])
-        
+            res.append(first[i] - second[i])
+
         return res
 
     def __str__(self) -> str:
         return f"{super().__str__()} {sum(self)}"
+
 
 if __name__ == "__main__":
     my_list = MyList([])
