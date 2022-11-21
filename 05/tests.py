@@ -70,11 +70,128 @@ class TestLRUCache(unittest.TestCase):
         cache.set("k3", "val3")
 
         self.assertEqual(
+            cache.get("k1"),
+            None
+        )
+
+        self.assertEqual(
+            cache.get("k2"),
+            "val2"
+        )
+
+        self.assertEqual(
+            cache.get("k3"),
+            "val3"
+        )
+
+    def test_get_change_order_call(self):
+        cache = LRUCache(2)
+
+        cache.set("k1", "val1")
+        cache.set("k2", "val2")
+
+        self.assertEqual(
+            cache.get("k1"),
+            "val1"
+        )
+
+        cache.set("k3", "val3")
+
+        self.assertEqual(
+            cache.get("k2"),
+            None
+        )
+
+        self.assertEqual(
+            cache.get("k1"),
+            "val1"
+        )
+
+    def test_set_change_order_call_same(self):
+        cache = LRUCache(2)
+
+        cache.set("k1", "val1")
+        cache.set("k2", "val2")
+        cache.set("k3", "val3")
+
+        self.assertEqual(
+            cache.get("k1"),
+            None
+        )
+
+        self.assertEqual(
+            cache.get("k2"),
+            "val2"
+        )
+        cache.set("k3", "val333")
+        cache.set("k4", "val4")
+
+        self.assertEqual(
             cache.get("k2"),
             None
         )
 
         self.assertEqual(
             cache.get("k3"),
+            "val333"
+        )
+        self.assertEqual(
+            cache.get("k4"),
+            "val4"
+        )
+
+    def test_cache_size_one(self):
+        cache = LRUCache(1)
+
+        cache.set("k1", "val1")
+
+        self.assertEqual(
+            cache.get("k1"),
+            "val1"
+        )
+
+        cache.set("k2", "val2")
+
+        self.assertEqual(
+            cache.get("k1"),
+            None
+        )
+
+        self.assertEqual(
+            cache.get("k2"),
+            "val2"
+        )
+
+    def test_as_task(self):
+        cache = LRUCache(2)
+
+        cache.set("k1", "val1")
+        cache.set("k2", "val2")
+
+        self.assertEqual(
+            cache.get("k3"),
+            None
+        )
+        self.assertEqual(
+            cache.get("k2"),
+            "val2"
+        )
+        self.assertEqual(
+            cache.get("k1"),
+            "val1"
+        )
+
+        cache.set("k3", "val3")
+
+        self.assertEqual(
+            cache.get("k3"),
             "val3"
+        )
+        self.assertEqual(
+            cache.get("k2"),
+            None
+        )
+        self.assertEqual(
+            cache.get("k1"),
+            "val1"
         )
