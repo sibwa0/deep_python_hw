@@ -102,6 +102,19 @@ class MyList(list):
         return f"{super().__str__()} {sum(self)}"
 
 
+def is_same(lst1: list, lst2: list) -> bool:
+    if type(lst1) != type(lst2):
+        return False
+
+    if len(lst1) != len(lst2):
+        return False
+
+    for i in range(len(lst1)):
+        if lst1[i] != lst2[i]:
+            return False
+    return True
+
+
 if __name__ == "__main__":
     my_list = MyList([])
     my_list.append(1)
