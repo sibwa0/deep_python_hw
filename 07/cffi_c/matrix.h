@@ -13,7 +13,7 @@ void init_matrix_norm_value(Matrix* matrix);
 void free_matrix(Matrix* matrix);
 int not_enough_space(const Matrix* matrix);
 
-Matrix* c_mul_plenty_matr(int row, int col, int iters);
+Matrix* c_mul_plenty_matr(Matrix* even_iter, Matrix* odd_iter, int iters);
 int mul(const Matrix* l, const Matrix* r, Matrix* result);
 
 

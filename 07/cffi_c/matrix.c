@@ -84,24 +84,20 @@ int mul(const Matrix* l, const Matrix* r, Matrix* result) {
     return 0;
 }
 
-Matrix* c_mul_plenty_matr(int row, int col, int iters)
+Matrix* c_mul_plenty_matr(Matrix* even_iter, Matrix* odd_iter, int iters)
 {
-    Matrix* res = create_matrix(row, col);
-    for (int i = 0; i < row; i += 1)
-        for (int j = 0; j < col; j += 1)
-            res->arr[i * col + j] = 1;
-
-    Matrix* even_iter = create_matrix(col, row);
-    Matrix* odd_iter = create_matrix(row, col);
+    Matrix* res = create_matrix(even_iter->col, even_iter->row);
+    for (int i = 0; i < res->row; i += 1)
+        for (int j = 0; j < res->col; j += 1)
+            res->arr[i * res->col + j] = 1;
 
     Matrix* tmp = NULL;
 
-    for (int k = 0; k < iters; k += 1)
+    for (int k = 0; k < 10; k += 1)
     {
         tmp = res;
 
         if (k % 2 == 0) {
-            init_matrix_norm_value(even_iter);
             if (mul(tmp, even_iter, res))
             {
                 printf("not mul even\n");
@@ -110,7 +106,6 @@ Matrix* c_mul_plenty_matr(int row, int col, int iters)
         }
         else
         {
-            init_matrix_norm_value(odd_iter);
             if (mul(tmp, odd_iter, res))
             {
                 printf("not mul odd\n");
@@ -125,8 +120,6 @@ Matrix* c_mul_plenty_matr(int row, int col, int iters)
         }
     }
 
-    free_matrix(even_iter);
-    free_matrix(odd_iter);
-
+    printf("OK\n");
     return res;
 }
