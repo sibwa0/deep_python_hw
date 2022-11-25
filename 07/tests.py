@@ -33,7 +33,7 @@ class TestMulMatr(unittest.TestCase):
 
     def test_c_mul(self):
         ffi = cffi.FFI()
-        cffi_lib = ffi.dlopen('./cffi_c/lib_matrix.so')
+        lib = ffi.dlopen('./cffi_c/libmatrix.so')
         ffi.cdef('''
         typedef struct Matrix {
             int row;
@@ -41,8 +41,19 @@ class TestMulMatr(unittest.TestCase):
             double* arr;
         } Matrix;
 
-        Matrix* c_mul_plenty_matr(int row, int col, int iters);
+        Matrix* create_matrix(int row, int col);
+        void init_matrix_norm_value(Matrix* matrix);
+        void free_matrix(Matrix* matrix);
+        int not_enough_space(const Matrix* matrix);
+
+        Matrix* c_mul_plenty_matr(Matrix* even_iter, Matrix* odd_iter, int iters);
+        int mul(const Matrix* l, const Matrix* r, Matrix* result);
         ''')
+
+        matrix_even = lib.create_matrix(COL, ROW)
+        matrix_odd = lib.create_matrix(ROW, COL)
+        lib.init_matrix_norm_value(matrix_even)
+        lib.init_matrix_norm_value(matrix_odd)
 
         row = 5
         col = 10

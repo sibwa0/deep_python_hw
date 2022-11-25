@@ -5,21 +5,21 @@ import cffi
 
 from mul_matrix import py_mul_plenty_matr
 
-RAW = 75
+ROW = 90
 COL = 100
-ITERS = 700
+ITERS = 500
 
 
 def main():
     print("=== Python ===")
     start_ts = time.time()
-    py_mul_plenty_matr(RAW, COL, ITERS)
+    py_mul_plenty_matr(ROW, COL, ITERS)
     end_ts = time.time()
     print(f"py_mul_plenty_matr: {end_ts-start_ts}")
 
     print("==== cffi ====")
     ffi = cffi.FFI()
-    cffi_lib = ffi.dlopen('./cffi_c/lib_matrix.so')
+    lib = ffi.dlopen('./cffi_c/libmatrix.so')
     ffi.cdef('''
     typedef struct Matrix {
         int row;
@@ -27,14 +27,25 @@ def main():
         double* arr;
     } Matrix;
 
-    Matrix* c_mul_plenty_matr(int row, int col, int iters);
+    Matrix* create_matrix(int row, int col);
+    void init_matrix_norm_value(Matrix* matrix);
+    void free_matrix(Matrix* matrix);
+    int not_enough_space(const Matrix* matrix);
+
+    Matrix* c_mul_plenty_matr(Matrix* even_iter, Matrix* odd_iter, int iters);
+    int mul(const Matrix* l, const Matrix* r, Matrix* result);
     ''')
-    # matrix = ffi.new("Matrix *")
+
+    matrix_even = lib.create_matrix(COL, ROW)
+    matrix_odd = lib.create_matrix(ROW, COL)
+    lib.init_matrix_norm_value(matrix_even)
+    lib.init_matrix_norm_value(matrix_odd)
+
 
     start_ts = time.time()
-    cffi_lib.c_mul_plenty_matr(RAW, COL, ITERS)
+    lib.c_mul_plenty_matr(matrix_even, matrix_odd, ITERS)
     end_ts = time.time()
-    print(f"c_mul_plenty_matr: {end_ts-start_ts}")
+    print(f"c_mul_matrix: {end_ts-start_ts}")
 
 
 if __name__ == "__main__":

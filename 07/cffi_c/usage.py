@@ -33,13 +33,10 @@ def c_mul():
 
 
     start_ts = time.time()
-    lib.c_mul_plenty_matr(matrix_even, matrix_odd, 1000)
+    lib.c_mul_plenty_matr(matrix_even, matrix_odd, 500)
     end_ts = time.time()
     print(f"c_mul_matrix: {end_ts-start_ts}")
 
-    # lib.free_matrix(matrix_even)
-    # lib.free_matrix(matrix_odd)
-    # lib.free_matrix(matrix)
 
 if __name__ == "__main__":
     c_mul()
