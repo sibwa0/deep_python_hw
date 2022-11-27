@@ -3,4 +3,4 @@ libmatrix.so
 c_code
 __pycache__
 .coverage
- 
+.vscode

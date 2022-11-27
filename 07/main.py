@@ -2,6 +2,7 @@
 
 import time
 import cffi
+import numpy as np
 
 from mul_matrix import py_mul_plenty_matr
 
@@ -12,8 +13,11 @@ ITERS = 500
 
 def main():
     print("=== Python ===")
+
+    even = np.random.normal(0, 0.1, size=(COL, ROW))
+    odd = np.random.normal(0, 0.1, size=(ROW, COL))
     start_ts = time.time()
-    py_mul_plenty_matr(ROW, COL, ITERS)
+    py_mul_plenty_matr(even, odd, ITERS)
     end_ts = time.time()
     print(f"py_mul_plenty_matr: {end_ts-start_ts}")
 

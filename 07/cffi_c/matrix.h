@@ -10,6 +10,8 @@ typedef struct Matrix {
 
 Matrix* create_matrix(int row, int col);
 void init_matrix_norm_value(Matrix* matrix);
+void init_ones_like(Matrix* matrix);
+int get_elem(Matrix* matrix, int row, int col);
 void free_matrix(Matrix* matrix);
 int not_enough_space(const Matrix* matrix);
 

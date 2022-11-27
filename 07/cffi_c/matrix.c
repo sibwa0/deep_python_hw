@@ -37,6 +37,13 @@ void init_matrix_norm_value(Matrix* matrix)
             matrix->arr[i * matrix->col + j] = (double)rand() / RAND_MAX;
 }
 
+void init_ones_like(Matrix* matrix)
+{
+    for (int i = 0; i < matrix->row; i += 1)
+        for (int j = 0; j < matrix->col; j += 1)
+            matrix->arr[i * matrix->col + j] = 1;
+}
+
 void free_matrix(Matrix* matrix)
 {
     if (matrix != NULL)
@@ -66,9 +73,6 @@ int mul(const Matrix* l, const Matrix* r, Matrix* result) {
     size_t l_rows = l->row;
     size_t l_cols = l->col;
     size_t r_cols = r->col;
-
-    result->row = l_rows;
-    result->col = r_cols;
 
     double l_elem = 0;
     double r_elem = 0;
