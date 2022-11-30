@@ -103,6 +103,8 @@ if __name__ == "__main__":
     file = logging.getLogger("to_file")
     output = logging.getLogger("to_stdout")
 
-    main(file)
     if console.s:
-        main(output)
+
+        file.addHandler(output)
+
+    main(file)
