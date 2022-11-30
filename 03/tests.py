@@ -2,10 +2,27 @@ import unittest
 import unittest.mock
 
 # from my_list import MyList
-from second_my_list import MyList
+from second_my_list import (
+    MyList,
+    is_same
+)
 
 
 class TestMyList(unittest.TestCase):
+    # is_same
+    def test_is_same(self):
+        my_lst1 = MyList([0, -1, 2])
+        my_lst2 = MyList([0, -1, 2])
+        my_lst3 = MyList([0, 0, 1])
+        lst2 = [0, -1, 2]
+        lst3 = [0, -1, 2, 0]
+        lst4 = [0, -1, 2, 0]
+
+        self.assertTrue(is_same(my_lst1, my_lst2))  # same MyList
+        self.assertFalse(is_same(my_lst1, my_lst3))  # dif MyList, sums equal
+        self.assertFalse(is_same(my_lst1, lst2))  # dif types
+        self.assertFalse(is_same(lst2, lst3))  # len
+        self.assertTrue(is_same(lst3, lst4))  # same list
 
     # __len__
     def test_print_object(self):
@@ -88,95 +105,167 @@ class TestMyList(unittest.TestCase):
         my_lst1 = MyList([0, -1, 2, 5])
         my_lst2 = MyList([0, 1, 3])
 
-        self.assertEqual(my_lst1 + my_lst2, MyList([0, 0, 5, 5]))
-        self.assertEqual(my_lst1, MyList([0, -1, 2, 5]))
-        self.assertEqual(my_lst2, MyList([0, 1, 3]))
+        self.assertTrue(
+            is_same(my_lst1 + my_lst2, MyList([0, 0, 5, 5]))
+        )
+        self.assertTrue(
+            is_same(my_lst1, MyList([0, -1, 2, 5]))
+        )
+        self.assertTrue(
+            is_same(my_lst2, MyList([0, 1, 3]))
+        )
 
     def test__add__two_my_list_second(self):
         my_lst1 = MyList([0, -1, 2, 5])
         my_lst2 = MyList([0, 1, 3, 5, 6])
 
-        self.assertEqual(my_lst1 + my_lst2, MyList([0, 0, 5, 10, 6]))
-        self.assertEqual(my_lst1, MyList([0, -1, 2, 5]))
-        self.assertEqual(my_lst2, MyList([0, 1, 3, 5, 6]))
+        self.assertTrue(
+            is_same(my_lst1 + my_lst2, MyList([0, 0, 5, 10, 6]))
+        )
+        self.assertTrue(
+            is_same(my_lst1, MyList([0, -1, 2, 5]))
+        )
+        self.assertTrue(
+            is_same(my_lst2, MyList([0, 1, 3, 5, 6]))
+        )
 
     def test__add__one_my_list_left_second(self):
         my_lst = MyList([0, -1, 2])
         lst = [0, 1, 3, 5]
 
-        self.assertEqual(my_lst + lst, MyList([0, 0, 5, 5]))
-        self.assertEqual(my_lst, MyList([0, -1, 2]))
-        self.assertEqual(lst, [0, 1, 3, 5])
+        self.assertTrue(
+            is_same(my_lst + lst, MyList([0, 0, 5, 5]))
+        )
+        self.assertTrue(
+            is_same(my_lst, MyList([0, -1, 2]))
+        )
+        self.assertTrue(
+            is_same(lst, [0, 1, 3, 5])
+        )
 
     def test__add__one_my_list_left_first(self):
         my_lst = MyList([0, -1, 2, 5, 6])
         lst = [0, 1, 3, 5]
 
-        self.assertEqual(my_lst + lst, MyList([0, 0, 5, 10, 6]))
-        self.assertEqual(my_lst, MyList([0, -1, 2, 5, 6]))
-        self.assertEqual(lst, [0, 1, 3, 5])
+        self.assertTrue(
+            is_same(my_lst + lst, MyList([0, 0, 5, 10, 6]))
+        )
+        self.assertTrue(
+            is_same(my_lst, MyList([0, -1, 2, 5, 6]))
+        )
+        self.assertTrue(
+            is_same(lst, [0, 1, 3, 5])
+        )
 
     def test__radd__one_my_list_right_second(self):
         lst = [0, -1, 2]
         my_lst = MyList([0, 1, 3, 5])
 
-        self.assertEqual(lst + my_lst, MyList([0, 0, 5, 5]))
-        self.assertEqual(lst, [0, -1, 2])
-        self.assertEqual(my_lst, MyList([0, 1, 3, 5]))
+        self.assertTrue(
+            is_same(lst + my_lst, MyList([0, 0, 5, 5]))
+        )
+        self.assertTrue(
+            is_same(lst, [0, -1, 2])
+        )
+        self.assertTrue(
+            is_same(my_lst, MyList([0, 1, 3, 5]))
+        )
 
     def test__radd__one_my_list_right_first(self):
         lst = [0, -1, 2, 5, 6]
         my_lst = MyList([0, 1, 3, 5])
 
-        self.assertEqual(lst + my_lst, MyList([0, 0, 5, 10, 6]))
-        self.assertEqual(lst, [0, -1, 2, 5, 6])
-        self.assertEqual(my_lst, MyList([0, 1, 3, 5]))
+        self.assertTrue(
+            is_same(lst + my_lst, MyList([0, 0, 5, 10, 6]))
+        )
+        self.assertTrue(
+            is_same(lst, [0, -1, 2, 5, 6])
+        )
+        self.assertTrue(
+            is_same(my_lst, MyList([0, 1, 3, 5]))
+        )
 
     # __sub__, __rsub__
     def test__sub__two_my_list_second(self):
         my_lst1 = MyList([0, -1, 2])
         my_lst2 = MyList([0, 1, 3, 5])
 
-        self.assertEqual(my_lst1 - my_lst2, MyList([0, -2, -1, -5]))
-        self.assertEqual(my_lst1, MyList([0, -1, 2]))
-        self.assertEqual(my_lst2, MyList([0, 1, 3, 5]))
+        self.assertTrue(
+            is_same(my_lst1 - my_lst2, MyList([0, -2, -1, -5]))
+        )
+        self.assertTrue(
+            is_same(my_lst1, MyList([0, -1, 2]))
+        )
+        self.assertTrue(
+            is_same(my_lst2, MyList([0, 1, 3, 5]))
+        )
 
     def test__sub__two_my_list_first(self):
         my_lst1 = MyList([0, -1, 2])
         my_lst2 = MyList([0, 1])
 
-        self.assertEqual(my_lst1 - my_lst2, MyList([0, -2, 2]))
-        self.assertEqual(my_lst1, MyList([0, -1, 2]))
-        self.assertEqual(my_lst2, MyList([0, 1]))
+        self.assertTrue(
+            is_same(my_lst1 - my_lst2, MyList([0, -2, 2]))
+        )
+        self.assertTrue(
+            is_same(my_lst1, MyList([0, -1, 2]))
+        )
+        self.assertTrue(
+            is_same(my_lst2, MyList([0, 1]))
+        )
 
     def test__sub__one_my_list_left_second(self):
         my_lst = MyList([0, -1, 2])
         lst = [0, 1, 3, 5]
 
-        self.assertEqual(my_lst - lst, MyList([0, -2, -1, -5]))
-        self.assertEqual(my_lst, MyList([0, -1, 2]))
-        self.assertEqual(lst, [0, 1, 3, 5])
+        self.assertTrue(
+            is_same(my_lst - lst, MyList([0, -2, -1, -5]))
+        )
+        self.assertTrue(
+            is_same(my_lst, MyList([0, -1, 2]))
+        )
+        self.assertTrue(
+            is_same(lst, [0, 1, 3, 5])
+        )
 
     def test__sub__one_my_list_left_first(self):
         my_lst = MyList([0, -1, 2, 5, 6])
         lst = [0, 1, 3, 5]
 
-        self.assertEqual(my_lst - lst, MyList([0, -2, -1, 0, 6]))
-        self.assertEqual(my_lst, MyList([0, -1, 2, 5, 6]))
-        self.assertEqual(lst, [0, 1, 3, 5])
+        self.assertTrue(
+            is_same(my_lst - lst, MyList([0, -2, -1, 0, 6]))
+        )
+        self.assertTrue(
+            is_same(my_lst, MyList([0, -1, 2, 5, 6]))
+        )
+        self.assertTrue(
+            is_same(lst, [0, 1, 3, 5])
+        )
 
     def test__rsub__one_my_list_right_second(self):
         lst = [0, -1, 2]
         my_lst = MyList([0, 1, 3, 5])
 
-        self.assertEqual(lst - my_lst, MyList([0, -2, -1, -5]))
-        self.assertEqual(lst, [0, -1, 2])
-        self.assertEqual(my_lst, MyList([0, 1, 3, 5]))
+        self.assertTrue(
+            is_same(lst - my_lst, MyList([0, -2, -1, -5]))
+        )
+        self.assertTrue(
+            is_same(lst, [0, -1, 2])
+        )
+        self.assertTrue(
+            is_same(my_lst, MyList([0, 1, 3, 5]))
+        )
 
     def test__rsub__one_my_list_right_first(self):
         lst = [0, -1, 2, 5, 6]
         my_lst = MyList([0, 1, 3, 5])
 
-        self.assertEqual(lst - my_lst, MyList([0, -2, -1, 0, 6]))
-        self.assertEqual(lst, [0, -1, 2, 5, 6])
-        self.assertEqual(my_lst, MyList([0, 1, 3, 5]))
+        self.assertTrue(
+            is_same(lst - my_lst, MyList([0, -2, -1, 0, 6]))
+        )
+        self.assertTrue(
+            is_same(lst, [0, -1, 2, 5, 6])
+        )
+        self.assertTrue(
+            is_same(my_lst, MyList([0, 1, 3, 5]))
+        )
