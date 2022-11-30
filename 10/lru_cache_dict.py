@@ -128,4 +128,7 @@ if __name__ == "__main__":
     if not console.s:
         output_log = None
 
-    main(log1=file_log, log2=output_log)
+    if console.s:
+        file.addHandler(output)
+
+    main(file)
