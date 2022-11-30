@@ -53,8 +53,8 @@ LOGGING_CONFIG = {
     },
     "loggers": {
         "to_file": {
-            "level": "DEBUG",
             "handlers": ["default"],
+            "level": "ERROR",
         },
         "to_stdout": {
             "level": "INFO",

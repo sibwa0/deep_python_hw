@@ -1,6 +1,7 @@
 from collections import defaultdict
 import logging
 import logging.config
+from sys import stdout
 import sys
 
 from utils import (
@@ -99,12 +100,26 @@ if __name__ == "__main__":
     parser = console_input()
     console = parser.parse_args(sys.argv[1:])
 
-    logging.config.dictConfig(LOGGING_CONFIG)
-    file = logging.getLogger("to_file")
-    output = logging.getLogger("to_stdout")
+    # logging.config.dictConfig(LOGGING_CONFIG)
+    # file = logging.getLogger("to_file")
+    # output = logging.getLogger("to_stdout")
+
+    file_formatter = logging.Formatter("%(asctime)s\t%(name)s\t%(levelname)s\t%(message)s")
+    file_handler = logging.FileHandler("file.log")
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(file_formatter)
+
+    output_formatter = logging.Formatter("%(name)s\t%(levelname)s\t%(message)s")
+    stdout_handler = logging.StreamHandler(stdout)
+    stdout_handler.setLevel(logging.INFO)
+    stdout_handler.setFormatter(output_formatter)
+
+    logger = logging.getLogger("log")
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(file_handler)
 
     if console.s:
 
-        file.addHandler(output)
+        logger.addHandler(stdout_handler)
 
-    main(file)
+    main(logger)
