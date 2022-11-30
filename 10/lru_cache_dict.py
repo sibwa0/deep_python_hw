@@ -109,16 +109,16 @@ if __name__ == "__main__":
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(file_formatter)
 
-    output_formatter = logging.Formatter("%(name)s\t%(levelname)s\t%(message)s")
-    stdout_handler = logging.StreamHandler(stdout)
-    stdout_handler.setLevel(logging.INFO)
-    stdout_handler.setFormatter(output_formatter)
-
     logger = logging.getLogger("log")
     logger.setLevel(logging.DEBUG)
     logger.addHandler(file_handler)
 
     if console.s:
+
+        output_formatter = logging.Formatter("%(name)s\t%(levelname)s\t%(message)s")
+        stdout_handler = logging.StreamHandler(stdout)
+        stdout_handler.setLevel(logging.INFO)
+        stdout_handler.setFormatter(output_formatter)
 
         logger.addHandler(stdout_handler)
 
