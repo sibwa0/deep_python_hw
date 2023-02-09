@@ -1,4 +1,4 @@
 # deep_python_hw
-main course vk education, 2-nd semester
+vk education main course, 2-nd semester
 
 Склянный Алексей, ML-21, МГТУ им. Баумана
